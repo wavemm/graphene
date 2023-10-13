@@ -2,13 +2,13 @@ import inspect
 from collections.abc import Mapping
 from functools import partial
 
+from ..utils.deprecated import warn_deprecation
 from .argument import Argument, to_arguments
 from .mountedtype import MountedType
 from .resolver import default_resolver
 from .structures import NonNull
 from .unmountedtype import UnmountedType
 from .utils import get_type
-from ..utils.deprecated import warn_deprecation
 
 base_type = type
 
@@ -96,8 +96,12 @@ class Field(MountedType):
             extra_args["name"] = name
             name = None
 
+        self.source_for_model_object = None
+        if isinstance(source, str):
+            self.source_for_model_object = source
+            source = None
         # Check if source is actually an argument of the field
-        if isinstance(source, (Argument, UnmountedType)):
+        elif isinstance(source, (Argument, UnmountedType)):
             extra_args["source"] = source
             source = None
 

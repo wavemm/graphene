@@ -1,4 +1,3 @@
-import datetime
 import graphene
 from graphene import relay
 from graphene.types.resolver import dict_resolver
@@ -89,8 +88,8 @@ def test_does_not_modify_input():
 
 TEST_DATA = {
     "events": [
-        {"id": "568", "date": datetime.date(2017, 5, 19), "movie": "1198359"},
-        {"id": "234", "date": datetime.date(2017, 5, 20), "movie": "1198359"},
+        {"id": "568", "movie": "1198359"},
+        {"id": "234", "movie": "1198359"},
     ],
     "movies": {
         "1198359": {
@@ -121,7 +120,6 @@ def test_example_end_to_end():
             default_resolver = dict_resolver
 
         movie = graphene.Field(Movie, required=True)
-        date = graphene.types.datetime.Date(required=True)
 
         def resolve_movie(event, info):
             return TEST_DATA["movies"][event["movie"]]
@@ -138,7 +136,6 @@ def test_example_end_to_end():
             events {
                 __typename
                 id
-                date
                 movie {
                     __typename
                     id
@@ -157,7 +154,6 @@ def test_example_end_to_end():
             {
                 "__typename": "Event",
                 "id": "RXZlbnQ6NTY4",
-                "date": "2017-05-19",
                 "movie": {
                     "__typename": "Movie",
                     "id": "TW92aWU6MTE5ODM1OQ==",
@@ -172,7 +168,6 @@ def test_example_end_to_end():
             {
                 "__typename": "Event",
                 "id": "RXZlbnQ6MjM0",
-                "date": "2017-05-20",
                 "movie": {"__typename": "Movie", "id": "TW92aWU6MTE5ODM1OQ=="},
             },
         ]

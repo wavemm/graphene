@@ -1,7 +1,7 @@
 from textwrap import dedent
 
 from ..argument import Argument
-from ..enum import Enum, PyEnum
+from ..enum import _Enum, PyEnum
 from ..field import Field
 from ..inputfield import InputField
 from ..inputobjecttype import InputObjectType
@@ -11,7 +11,7 @@ from ..schema import ObjectType, Schema
 
 
 def test_enum_construction():
-    class RGB(Enum):
+    class RGB(_Enum):
         """Description"""
 
         RED = 1
@@ -35,7 +35,7 @@ def test_enum_construction():
 
 
 def test_enum_construction_meta():
-    class RGB(Enum):
+    class RGB(_Enum):
         class Meta:
             name = "RGBEnum"
             description = "Description"
@@ -49,7 +49,7 @@ def test_enum_construction_meta():
 
 
 def test_enum_instance_construction():
-    RGB = Enum("RGB", "RED,GREEN,BLUE")
+    RGB = _Enum("RGB", "RED,GREEN,BLUE")
 
     values = RGB._meta.enum.__members__.values()
     assert sorted(v.name for v in values) == ["BLUE", "GREEN", "RED"]
@@ -58,7 +58,7 @@ def test_enum_instance_construction():
 def test_enum_from_builtin_enum():
     PyRGB = PyEnum("RGB", "RED,GREEN,BLUE")
 
-    RGB = Enum.from_enum(PyRGB)
+    RGB = _Enum.from_enum(PyRGB)
     assert RGB._meta.enum == PyRGB
     assert RGB.RED
     assert RGB.GREEN
@@ -67,7 +67,7 @@ def test_enum_from_builtin_enum():
 
 def test_enum_custom_description_in_constructor():
     description = "An enumeration, but with a custom description"
-    RGB = Enum(
+    RGB = _Enum(
         "RGB",
         "RED,GREEN,BLUE",
         description=description,
@@ -76,7 +76,7 @@ def test_enum_custom_description_in_constructor():
 
 
 def test_enum_from_python3_enum_uses_default_builtin_doc():
-    RGB = Enum("RGB", "RED,GREEN,BLUE")
+    RGB = _Enum("RGB", "RED,GREEN,BLUE")
     assert RGB._meta.description == "An enumeration."
 
 
@@ -91,7 +91,7 @@ def test_enum_from_builtin_enum_accepts_lambda_description():
         return "meh" if value == Episode.NEWHOPE else None
 
     PyEpisode = PyEnum("PyEpisode", "NEWHOPE,EMPIRE,JEDI")
-    Episode = Enum.from_enum(
+    Episode = _Enum.from_enum(
         PyEpisode,
         description=custom_description,
         deprecation_reason=custom_deprecation_reason,
@@ -125,7 +125,7 @@ def test_enum_from_python3_enum_uses_enum_doc():
         GREEN = 2
         BLUE = 3
 
-    RGB = Enum.from_enum(Color)
+    RGB = _Enum.from_enum(Color)
     assert RGB._meta.enum == Color
     assert RGB._meta.description == "This is the description"
     assert RGB
@@ -135,7 +135,7 @@ def test_enum_from_python3_enum_uses_enum_doc():
 
 
 def test_enum_value_from_class():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -146,7 +146,7 @@ def test_enum_value_from_class():
 
 
 def test_enum_value_as_unmounted_field():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -158,7 +158,7 @@ def test_enum_value_as_unmounted_field():
 
 
 def test_enum_value_as_unmounted_inputfield():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -170,7 +170,7 @@ def test_enum_value_as_unmounted_inputfield():
 
 
 def test_enum_value_as_unmounted_argument():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -182,7 +182,7 @@ def test_enum_value_as_unmounted_argument():
 
 
 def test_enum_can_be_compared():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -193,7 +193,7 @@ def test_enum_can_be_compared():
 
 
 def test_enum_can_be_initialized():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -204,7 +204,7 @@ def test_enum_can_be_initialized():
 
 
 def test_enum_can_retrieve_members():
-    class RGB(Enum):
+    class RGB(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -215,12 +215,12 @@ def test_enum_can_retrieve_members():
 
 
 def test_enum_to_enum_comparison_should_differ():
-    class RGB1(Enum):
+    class RGB1(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
 
-    class RGB2(Enum):
+    class RGB2(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -231,7 +231,7 @@ def test_enum_to_enum_comparison_should_differ():
 
 
 def test_enum_skip_meta_from_members():
-    class RGB1(Enum):
+    class RGB1(_Enum):
         class Meta:
             name = "RGB"
 
@@ -256,7 +256,7 @@ def test_enum_types():
         YELLOW = 2
         BLUE = 3
 
-    GColor = Enum.from_enum(Color)
+    GColor = _Enum.from_enum(Color)
 
     class Query(ObjectType):
         color = GColor(required=True)
@@ -293,7 +293,7 @@ def test_enum_resolver():
         GREEN = 2
         BLUE = 3
 
-    GColor = Enum.from_enum(Color)
+    GColor = _Enum.from_enum(Color)
 
     class Query(ObjectType):
         color = GColor(required=True)
@@ -317,7 +317,7 @@ def test_enum_resolver_compat():
         GREEN = 2
         BLUE = 3
 
-    GColor = Enum.from_enum(Color)
+    GColor = _Enum.from_enum(Color)
 
     class Query(ObjectType):
         color = GColor(required=True)
@@ -351,8 +351,8 @@ def test_enum_with_name():
         YELLOW = 2
         BLUE = 3
 
-    GColor = Enum.from_enum(Color, description="original colors")
-    UniqueGColor = Enum.from_enum(
+    GColor = _Enum.from_enum(Color, description="original colors")
+    UniqueGColor = _Enum.from_enum(
         Color, name="UniqueColor", description="unique colors"
     )
 
@@ -397,7 +397,7 @@ def test_enum_resolver_invalid():
         GREEN = 2
         BLUE = 3
 
-    GColor = Enum.from_enum(Color)
+    GColor = _Enum.from_enum(Color)
 
     class Query(ObjectType):
         color = GColor(required=True)
@@ -413,7 +413,7 @@ def test_enum_resolver_invalid():
 
 
 def test_field_enum_argument():
-    class Color(Enum):
+    class Color(_Enum):
         RED = 1
         GREEN = 2
         BLUE = 3
@@ -448,7 +448,7 @@ def test_field_enum_argument():
 
 
 def test_mutation_enum_input():
-    class RGB(Enum):
+    class RGB(_Enum):
         """Available colors"""
 
         RED = 1
@@ -490,7 +490,7 @@ def test_mutation_enum_input():
 
 
 def test_mutation_enum_input_type():
-    class RGB(Enum):
+    class RGB(_Enum):
         """Available colors"""
 
         RED = 1
@@ -536,7 +536,7 @@ def test_mutation_enum_input_type():
 
 
 def test_hashable_enum():
-    class RGB(Enum):
+    class RGB(_Enum):
         """Available colors"""
 
         RED = 1
@@ -551,7 +551,7 @@ def test_hashable_enum():
 
 
 def test_hashable_instance_creation_enum():
-    Episode = Enum("Episode", [("NEWHOPE", 4), ("EMPIRE", 5), ("JEDI", 6)])
+    Episode = _Enum("Episode", [("NEWHOPE", 4), ("EMPIRE", 5), ("JEDI", 6)])
 
     trilogy_map = {Episode.NEWHOPE: "better", Episode.EMPIRE: "best", 5: "foo"}
 
@@ -561,7 +561,7 @@ def test_hashable_instance_creation_enum():
 
 
 def test_enum_iteration():
-    class TestEnum(Enum):
+    class TestEnum(_Enum):
         FIRST = 1
         SECOND = 2
 
@@ -573,7 +573,7 @@ def test_enum_iteration():
 
 
 def test_iterable_instance_creation_enum():
-    TestEnum = Enum("TestEnum", [("FIRST", 1), ("SECOND", 2)])
+    TestEnum = _Enum("TestEnum", [("FIRST", 1), ("SECOND", 2)])
 
     result = []
     expected_values = ["FIRST", "SECOND"]
@@ -584,7 +584,7 @@ def test_iterable_instance_creation_enum():
 
 # https://github.com/graphql-python/graphene/issues/1321
 def test_enum_description_member_not_interpreted_as_property():
-    class RGB(Enum):
+    class RGB(_Enum):
         """Description"""
 
         red = "red"

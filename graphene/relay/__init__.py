@@ -5,7 +5,6 @@ from .id_type import (
     BaseGlobalIDType,
     DefaultGlobalIDType,
     SimpleGlobalIDType,
-    UUIDGlobalIDType,
 )
 
 __all__ = [
@@ -18,6 +17,5 @@ __all__ = [
     "Node",
     "PageInfo",
     "SimpleGlobalIDType",
-    "UUIDGlobalIDType",
     "is_node",
 ]

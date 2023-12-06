@@ -16,7 +16,7 @@ class ScalarOptions(BaseOptions):
     pass
 
 
-class Scalar(UnmountedType, BaseType):
+class _Scalar(UnmountedType, BaseType):
     """
     Scalar Type Definition
 
@@ -28,7 +28,7 @@ class Scalar(UnmountedType, BaseType):
     @classmethod
     def __init_subclass_with_meta__(cls, **options):
         _meta = ScalarOptions(cls)
-        super(Scalar, cls).__init_subclass_with_meta__(_meta=_meta, **options)
+        super(_Scalar, cls).__init_subclass_with_meta__(_meta=_meta, **options)
 
     serialize = None
     parse_value = None
@@ -52,7 +52,7 @@ MAX_INT = 2147483647
 MIN_INT = -2147483648
 
 
-class Int(Scalar):
+class Int(_Scalar):
     """
     The `Int` scalar type represents non-fractional signed whole numeric
     values. Int can represent values between -(2^53 - 1) and 2^53 - 1 since
@@ -85,7 +85,7 @@ class Int(Scalar):
         return Undefined
 
 
-class BigInt(Scalar):
+class BigInt(_Scalar):
     """
     The `BigInt` scalar type represents non-fractional whole numeric values.
     `BigInt` is not constrained to 32-bit like the `Int` type and thus is a less
@@ -113,7 +113,7 @@ class BigInt(Scalar):
         return Undefined
 
 
-class Float(Scalar):
+class Float(_Scalar):
     """
     The `Float` scalar type represents signed double-precision fractional
     values as specified by
@@ -138,7 +138,7 @@ class Float(Scalar):
         return Undefined
 
 
-class String(Scalar):
+class String(_Scalar):
     """
     The `String` scalar type represents textual data, represented as UTF-8
     character sequences. The String type is most often used by GraphQL to
@@ -161,7 +161,7 @@ class String(Scalar):
         return Undefined
 
 
-class Boolean(Scalar):
+class Boolean(_Scalar):
     """
     The `Boolean` scalar type represents `true` or `false`.
     """
@@ -176,7 +176,7 @@ class Boolean(Scalar):
         return Undefined
 
 
-class ID(Scalar):
+class ID(_Scalar):
     """
     The `ID` scalar type represents a unique identifier, often used to
     refetch an object or as key for a cache. The ID type appears in a JSON

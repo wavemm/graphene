@@ -1,9 +1,9 @@
 import pickle
 
-from ...types.enum import Enum
+from ...types.enum import _Enum
 
 
-class PickleEnum(Enum):
+class PickleEnum(_Enum):
     # is defined outside of test because pickle unable to dump class inside ot pytest function
     A = "a"
     B = 1

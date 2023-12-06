@@ -2,7 +2,7 @@ import copy
 
 from ..argument import Argument
 from ..definitions import GrapheneGraphQLType
-from ..enum import Enum
+from ..enum import _Enum
 from ..field import Field
 from ..inputfield import InputField
 from ..inputobjecttype import InputObjectType
@@ -61,7 +61,7 @@ class MyUnion(Union):
         types = (Article,)
 
 
-class MyEnum(Enum):
+class MyEnum(_Enum):
     foo = "foo"
 
 

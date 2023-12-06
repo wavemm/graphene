@@ -41,13 +41,13 @@ from .definitions import (
     GrapheneUnionType,
 )
 from .dynamic import Dynamic
-from .enum import Enum
+from .enum import _Enum
 from .field import Field
 from .inputobjecttype import InputObjectType
 from .interface import Interface
 from .objecttype import ObjectType
 from .resolver import get_default_resolver
-from .scalars import ID, Boolean, Float, Int, Scalar, String
+from .scalars import ID, Boolean, Float, Int, _Scalar, String
 from .structures import List, NonNull
 from .union import Union
 from .utils import get_field_as
@@ -70,7 +70,7 @@ def is_graphene_type(type_):
     if isinstance(type_, (List, NonNull)):
         return True
     if inspect.isclass(type_) and issubclass(
-        type_, (ObjectType, InputObjectType, Scalar, Interface, Union, Enum)
+        type_, (ObjectType, InputObjectType, _Scalar, Interface, Union, _Enum)
     ):
         return True
 
@@ -131,9 +131,9 @@ class TypeMap(dict):
             graphql_type = self.create_inputobjecttype(graphene_type)
         elif issubclass(graphene_type, Interface):
             graphql_type = self.create_interface(graphene_type)
-        elif issubclass(graphene_type, Scalar):
+        elif issubclass(graphene_type, _Scalar):
             graphql_type = self.create_scalar(graphene_type)
-        elif issubclass(graphene_type, Enum):
+        elif issubclass(graphene_type, _Enum):
             graphql_type = self.create_enum(graphene_type)
         elif issubclass(graphene_type, Union):
             graphql_type = self.construct_union(graphene_type)

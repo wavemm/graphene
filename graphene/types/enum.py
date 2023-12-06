@@ -20,7 +20,7 @@ EnumType = type(PyEnum)
 
 
 class EnumOptions(BaseOptions):
-    enum = None  # type: Enum
+    enum = None  # type: _Enum
     deprecation_reason = None
 
 
@@ -47,7 +47,7 @@ class EnumMeta(SubclassWithMeta_Meta):
         return {}
 
     def __call__(cls, *args, **kwargs):  # noqa: N805
-        if cls is Enum:
+        if cls is _Enum:
             description = kwargs.pop("description", None)
             deprecation_reason = kwargs.pop("deprecation_reason", None)
             return cls.from_enum(
@@ -72,10 +72,10 @@ class EnumMeta(SubclassWithMeta_Meta):
             "deprecation_reason": deprecation_reason,
         }
         meta_class = type("Meta", (object,), meta_dict)
-        return type(name, (Enum,), {"Meta": meta_class})
+        return type(name, (_Enum,), {"Meta": meta_class})
 
 
-class Enum(UnmountedType, BaseType, metaclass=EnumMeta):
+class _Enum(UnmountedType, BaseType, metaclass=EnumMeta):
     """
     Enum type definition
 
@@ -109,7 +109,7 @@ class Enum(UnmountedType, BaseType, metaclass=EnumMeta):
         for key, value in _meta.enum.__members__.items():
             setattr(cls, key, value)
 
-        super(Enum, cls).__init_subclass_with_meta__(_meta=_meta, **options)
+        super(_Enum, cls).__init_subclass_with_meta__(_meta=_meta, **options)
 
     @classmethod
     def get_type(cls):

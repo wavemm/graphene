@@ -5,7 +5,9 @@ from typing import Type
 
 from graphql_relay import connection_from_array
 
-from ..types import Boolean, Enum, Int, Interface, List, NonNull, Scalar, String, Union
+from ..types import Boolean, Int, Interface, List, NonNull, String, Union
+from ..types.enum import _Enum
+from ..types.scalars import _Scalar
 from ..types.field import Field
 from ..types.objecttype import ObjectType, ObjectTypeOptions
 from ..utils.thenables import maybe_thenable
@@ -96,7 +98,7 @@ class Connection(ObjectType):
             _meta = ConnectionOptions(cls)
         assert node, f"You have to provide a node in {cls.__name__}.Meta"
         assert isinstance(node, NonNull) or issubclass(
-            node, (Scalar, Enum, ObjectType, Interface, Union, NonNull)
+            node, (_Scalar, _Enum, ObjectType, Interface, Union, NonNull)
         ), f'Received incompatible node "{node}" for Connection {cls.__name__}.'
 
         base_name = re.sub("Connection$", "", name or cls.__name__) or node._meta.name

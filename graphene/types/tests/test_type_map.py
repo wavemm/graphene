@@ -13,7 +13,7 @@ from graphql.type import (
 )
 
 from ..dynamic import Dynamic
-from ..enum import Enum
+from ..enum import _Enum
 from ..field import Field
 from ..inputfield import InputField
 from ..inputobjecttype import InputObjectType
@@ -31,7 +31,7 @@ def create_type_map(types, auto_camelcase=True):
 
 
 def test_enum():
-    class MyEnum(Enum):
+    class MyEnum(_Enum):
         """Description"""
 
         foo = 1

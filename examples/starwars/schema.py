@@ -1,9 +1,10 @@
 import graphene
+from graphene.types.enum import _Enum
 
 from .data import get_character, get_droid, get_hero, get_human
 
 
-class Episode(graphene.Enum):
+class Episode(_Enum):
     NEWHOPE = 4
     EMPIRE = 5
     JEDI = 6

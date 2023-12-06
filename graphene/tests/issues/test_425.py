@@ -1,7 +1,7 @@
 # https://github.com/graphql-python/graphene/issues/425
 # Adapted for Graphene 2.0
 
-from graphene.types.enum import Enum, EnumOptions
+from graphene.types.enum import _Enum, EnumOptions
 from graphene.types.inputobjecttype import InputObjectType
 from graphene.types.objecttype import ObjectType, ObjectTypeOptions
 
@@ -87,7 +87,7 @@ class SpecialEnumOptions(EnumOptions):
     other_attr = None
 
 
-class SpecialEnum(Enum):
+class SpecialEnum(_Enum):
     @classmethod
     def __init_subclass_with_meta__(cls, other_attr="default", **options):
         _meta = SpecialEnumOptions(cls)

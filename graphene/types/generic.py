@@ -11,10 +11,10 @@ from graphql.language.ast import (
 
 from graphene.types.scalars import MAX_INT, MIN_INT
 
-from .scalars import Scalar
+from .scalars import _Scalar
 
 
-class GenericScalar(Scalar):
+class GenericScalar(_Scalar):
     """
     The `GenericScalar` scalar type represents a generic
     GraphQL scalar value that could be:

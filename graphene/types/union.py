@@ -74,3 +74,5 @@ class Union(UnmountedType, BaseType):
 
         if isinstance(instance, ObjectType):
             return type(instance)
+        if hasattr(instance, "_type_definition"):
+            return type(instance)

@@ -396,6 +396,11 @@ class TypeMap(dict):
 
         if inspect.isclass(type_) and issubclass(type_, ObjectType):
             return type_._meta.name
+        if (
+            (strawberry_definition := getattr(type_, "_type_definition", None))
+            is not None
+        ) and (name := getattr(strawberry_definition, "name", None)) is not None:
+            return name
 
         return_type = self[type_name]
         return default_type_resolver(root, info, return_type)
